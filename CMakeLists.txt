@@ -22,10 +22,8 @@ qt_add_qml_module(appQTQMLAPP2
     URI QTQMLAPP2
     QML_FILES
         Main.qml
-        SOURCES firefox.h firefox.cpp
         SOURCES
-        SOURCES userinteractor.h userinteractor.cpp
-        SOURCES internetexplorer.h internetexplorer.cpp
+        SOURCES applicationwindow.h applicationwindow.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

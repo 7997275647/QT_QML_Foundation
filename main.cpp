@@ -1,34 +1,32 @@
-#include <QGuiApplication>
+#include <QCoreApplication>
 #include <QQmlApplicationEngine>
+#include <QString>
+#include <QTimer>
 //user includes
-#include "firefox.h"
-#include "internetexplorer.h"
-#include "userinteractor.h"
+#include "applicationwindow.h"
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-    //QGuiApplication app(argc, argv);
 
-    UserInteractor userInteractor;
-    InternetExplorer internetExplorer;
-    FireFox fireFox;
+    ApplicationWindow rootWindow("root window");
 
+    ApplicationWindow *parentWindow1 = new ApplicationWindow("parent window 1", &rootWindow);
+    ApplicationWindow *parentWindow2 = new ApplicationWindow("parent window 2", &rootWindow);
 
+    for (int i = 0; i<2; i++){
+        ApplicationWindow *childWindow1 = new ApplicationWindow(QString("child window %1 of parent window 1").arg(i), parentWindow1);
+        ApplicationWindow *childWindow2 = new ApplicationWindow(QString("child window %1 of parent window 2").arg(i), parentWindow2);
 
-    QObject::connect(&userInteractor, &UserInteractor::phraseTyped, &fireFox, &FireFox::browse);
-    QObject::connect(&userInteractor, &UserInteractor::phraseTyped, &internetExplorer, &InternetExplorer::browseRequested);
-    userInteractor.getInput();
+    }
 
-    /*QQmlApplicationEngine engine;
-    QObject::connect(
-        &engine,
-        &QQmlApplicationEngine::objectCreationFailed,
-        &app,
-        []() { QCoreApplication::exit(-1); },
-        Qt::QueuedConnection);
-    engine.loadFromModule("QTQMLAPP2", "Main");
+    QTimer:: singleShot(3000, [&](){
+        parentWindow1->deleteLater();
+    });
 
-    return QGuiApplication::exec();*/
+    QTimer:: singleShot(5000, [&](){
+        a.quit();
+    });
+
     return a.exec();
 }
